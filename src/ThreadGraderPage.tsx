@@ -1,7 +1,27 @@
 import { useState, useEffect, useRef } from 'react';
 import { SignInButton } from '@clerk/clerk-react';
 import { useToolApi } from './useToolApi.js';
-import { ToolHero, ScoreCard, SectionBreakdown, CompareLayout, Rewrites, CrossPromo, track } from './kit.js';
+import { ToolHero, ScoreCard, SectionBreakdown, CompareLayout, Rewrites, CrossPromo, track } from '@bilkobibitkov/host-kit';
+
+const THREAD_GRADER_THEME = {
+  heroGradient: 'from-[#0f1729] via-[#0a1020] to-[#0f1729]',
+  glowColor: 'rgba(56,189,248,0.14)',
+  accentText: 'text-sky-400',
+  accentTextLight: 'text-sky-500',
+};
+
+const CROSS_PROMO_ITEMS = [
+  {
+    name: 'HeadlineGrader',
+    href: 'https://bilko.run/products/headline-grader',
+    hook: 'Thread hook is just a headline. Score yours in isolation.',
+  },
+  {
+    name: 'AudienceDecoder',
+    href: 'https://bilko.run/products/audience-decoder',
+    hook: "Know who's reading your threads. Decode your audience.",
+  },
+];
 
 interface PillarScore { score: number; max: number; feedback: string; }
 interface TweetBreakdown { tweet_index: number; text_preview: string; score: number; note: string; }
@@ -457,6 +477,7 @@ export function ThreadGraderPage() {
       </SignInButton>
 
       <ToolHero
+        theme={THREAD_GRADER_THEME}
         title="Grade or generate threads"
         tagline="AI scores hook strength, tension flow, and share triggers — or writes threads for you"
       >
@@ -687,7 +708,7 @@ export function ThreadGraderPage() {
 
       {result && (
         <div ref={resultRef} className="max-w-2xl mx-auto px-6 pt-10 space-y-6 pb-16">
-          <ScoreCard score={result.total_score} grade={result.grade} verdict={result.verdict} toolName="ThreadGrader" />
+          <ScoreCard score={result.total_score} grade={result.grade} verdict={result.verdict} toolName="ThreadGrader" theme={THREAD_GRADER_THEME} />
           {(() => {
             const vp = viralPotential(result.total_score);
             return (
@@ -760,7 +781,7 @@ export function ThreadGraderPage() {
               ))}
             </div>
           )}
-          <CrossPromo />
+          <CrossPromo items={CROSS_PROMO_ITEMS} />
           <div className="text-center pt-4">
             <button
               onClick={() => { reset(); setThread(''); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
